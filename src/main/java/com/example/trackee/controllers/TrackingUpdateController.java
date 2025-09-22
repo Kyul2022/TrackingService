@@ -29,26 +29,33 @@ public class TrackingUpdateController {
 	@PostMapping
     public ResponseEntity<?> getTrackingInfos(@RequestBody TrackingRequest request) {
 		try {
-        	String EnterpriseId = request.getEnterpriseId();
-			TrackingUpdates T = trackService.findByLatestDriverAndEnterpriseId(request.getDriver(), EnterpriseId);
-			TrackingResponse response = new TrackingResponse();
-			response.setCity(T.getCity());
-			response.setDriver(T.getDriver());
-			response.setLat(T.getLat());
-			response.setLon(T.getLon());
-			
-            return ResponseEntity.ok(response);
+		    TrackingUpdates T = trackService.findByLatestDriver(request.getDriver());
+		    TrackingResponse response = new TrackingResponse();
+		    
+		    if(T == null) {
+		        response.setCity(request.getDepartureAgency());
+		        response.setDriver(request.getDriver()); // Use request.getDriver() instead of T.getDriver()
+		        return ResponseEntity.ok(response);
+		    }
+		    
+		    response.setCity(T.getCity());
+		    response.setDriver(T.getDriver());
+		    response.setLat(T.getLat());
+		    response.setLon(T.getLon());
+
+		    return ResponseEntity.ok(response);
 		} catch(Exception E) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(Map.of("error", E.getMessage()));		
-            }
+		    return ResponseEntity
+		        .badRequest()
+		        .body(Map.of("error", E.getMessage()));
+		}
 	}
 	
 	@PostMapping("/setInfos")
     public ResponseEntity<?> setTrackingInfos(@AuthenticationPrincipal Jwt jwt, @RequestBody TrackingUpdates update) {
 		try {
             String email = jwt.getClaimAsString("email");
+            System.out.println("Hey : "+email);
         	String EnterpriseId = jwt.getClaimAsString("family_name");
             update.setDriver(email);
             update.setEnterpriseId(EnterpriseId);
@@ -56,6 +63,7 @@ public class TrackingUpdateController {
 			TrackingUpdates T = trackService.save(update);
             return ResponseEntity.ok(T);
 		} catch(Exception E) {
+            System.out.println("Hey : "+E.getMessage());
             return ResponseEntity
                     .badRequest()
                     .body(Map.of("error", E.getMessage()));		

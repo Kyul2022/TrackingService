@@ -16,7 +16,7 @@ public class TrackingUpdateService {
 		return trackRepo.save(T);
 	}
 	
-	public TrackingUpdates findByLatestDriverAndEnterpriseId (String driver, String enterpriseId) {
-		return trackRepo.findTopByDriverAndEnterpriseIdOrderByUpdatedAtDesc(driver, enterpriseId);
+	public TrackingUpdates findByLatestDriver (String driver) {
+		return trackRepo.findTopByDriverOrderByUpdatedAtDesc(driver);
 	}
 }

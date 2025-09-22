@@ -9,4 +9,6 @@ import com.example.trackee.model.TrackingUpdates;
 public interface TrackingUpdateRepository extends JpaRepository<TrackingUpdates, Integer> {
 
 	TrackingUpdates findTopByDriverAndEnterpriseIdOrderByUpdatedAtDesc(String driver, String enterpriseId);
-	}
+	TrackingUpdates findTopByDriverOrderByUpdatedAtDesc(String driver);
+
+}

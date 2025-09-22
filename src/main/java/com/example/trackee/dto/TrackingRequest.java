@@ -6,5 +6,5 @@ import lombok.Data;
 public class TrackingRequest {
 
 	private String driver;
-	private String enterpriseId;
+	private String departureAgency;
 }
