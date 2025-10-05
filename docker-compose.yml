@@ -27,6 +27,7 @@ services:
       SPRING_DATASOURCE_USERNAME: tracking
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_DATASOURCE_HIKARI_INITIALIZATION-FAIL-TIMEOUT: 30000
       SPRING_JPA_SHOW_SQL: "true"
 
       # Eureka + Keycloak configs
