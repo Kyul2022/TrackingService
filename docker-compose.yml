@@ -6,10 +6,10 @@ services:
     image: mysql:8.0
     container_name: tracking-db
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: trackingdb
-      MYSQL_USER: tracking
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - ../init_databases/trackingservice:/docker-entrypoint-initdb.d  # initialization scripts
       - tracking_db_data:/var/lib/mysql
@@ -23,19 +23,19 @@ services:
     image: ghcr.io/kyul2022/tracking-service:latest   # pushed from GitHub Actions
     container_name: tracking-service
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://tracking-db:3306/trackingdb?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: tracking
-      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_DATASOURCE_HIKARI_INITIALIZATION-FAIL-TIMEOUT: 30000
       SPRING_JPA_SHOW_SQL: "true"
 
       # Eureka + Keycloak configs
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-      KEYCLOAK_AUTH_SERVER_URL: http://84.247.135.231:8180
-      KEYCLOAK_REALM: microservices
-      KEYCLOAK_CLIENT_ID: microservices-client
-      KEYCLOAK_CLIENT_SECRET: xzqSYMI1pzumAj9BGD7BSKhI3IFAwy5e
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+      KEYCLOAK_AUTH_SERVER_URL: ${KEYCLOAK_AUTH_SERVER_URL}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
     depends_on:
       - tracking-db
     networks:
